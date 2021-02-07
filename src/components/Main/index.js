@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './style.css';
 import Api from '../../util/api'
-import Nav from '../Nav'
+import Search from '../Search'
 import Table from '../Table'
 
 class Main extends Component {
@@ -9,7 +9,9 @@ class Main extends Component {
     state = {
         users: [],
         order: 'descend',
-        filterUsers: []
+        filterUsers: [],
+        search: "",
+        results: []
 
     }
     componentDidMount() {
@@ -23,11 +25,21 @@ class Main extends Component {
         })
     }
 
+    handleInputChange = event => {
+        const name = event.target.name;
+        const value = event.target.value;
+        this.setState({
+            [name]: value
+        })
+    }
+    
     render() {
+        const lowercasedSearch = this.state.search.toLowerCase();
+        const searchResult = this.state.users.filter(name => name.name.first.concat(name.name.last).toLocaleLowerCase().includes(lowercasedSearch));
         return (
 
             <div className="container">
-                <Nav />
+                <Search />
                 <Table
                     users={this.state.filterUsers}
                 // handleSort={this.handleSort}
